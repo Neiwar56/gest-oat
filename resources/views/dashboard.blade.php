@@ -1,17 +1,30 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app-shell')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
+@section('title','Tableau de Bord - IdentifiGen')
+@section('header','Tableau de Bord')
+
+@section('content')
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-xl font-bold mb-4">Bienvenue</h2>
+            <p class="text-gray-600">Utilisez le menu pour gérer les personnes.</p>
+                        </div>
+                    </div>
+                    <div>
+        <div class="bg-white p-6 rounded-xl shadow">
+            <h2 class="text-xl font-bold mb-6">Actions rapides</h2>
+                            <div class="space-y-4">
+                <a href="{{ route('personnes.create') }}" class="flex items-center p-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition">
+                                    <i data-feather="user-plus" class="w-5 h-5"></i>
+                                    <span class="ml-3 font-medium">Ajouter une personne</span>
+                                </a>
+                <a href="{{ route('personnes.index') }}" class="flex items-center p-3 bg-gray-50 text-gray-700 rounded-lg hover:bg-gray-100 transition">
+                    <i data-feather="users" class="w-5 h-5"></i>
+                    <span class="ml-3 font-medium">Voir les personnes</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+@endsection

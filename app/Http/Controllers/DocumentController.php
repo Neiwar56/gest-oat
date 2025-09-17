@@ -32,8 +32,10 @@ class DocumentController extends Controller
             // 2. Traitement de la photo
             if ($request->hasFile('photo')) {
                 // On stocke le fichier et on récupère son chemin
-                $path = $request->file('photo')->store('documents/photos', 'public');
-                // On enregistre le chemin dans la base de données
+                $path = $request->file('photo')->store('personnes', 'public');
+                // On met à jour la photo dans la table personnes
+                $personne->update(['photo_path' => $path]);
+                // On enregistre aussi le chemin dans la table documents
                 $personne->documents()->create([
                     'type_document' => 'photo',
                     'chemin_fichier' => $path,
@@ -60,9 +62,9 @@ class DocumentController extends Controller
         } catch (\Exception $e) {
             // En cas d'erreur, on la logue et on redirige avec un message d'échec
             Log::error("Erreur d'upload de fichier: " . $e->getMessage());
-            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'upload des fichiers.');
+            return redirect()->back()->with('error', 'Une erreur est survenue lors de l\'upload des fichiers: ' . $e->getMessage());
         }
 
-        return redirect()->route('personnes.index')->with('success', 'Enregistrés avec succès !');
+        return redirect()->route('personnes.index')->with('success', 'Personne et documents enregistrés avec succès !');
     }
 }

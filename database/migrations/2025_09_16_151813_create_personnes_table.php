@@ -42,6 +42,9 @@ return new class extends Migration
         $table->string('email')->nullable();
         $table->string('telephone');
 
+        // Photo stockée (chemin vers storage)
+        $table->string('photo_path')->nullable();
+
         $table->timestamps();
     });
     }

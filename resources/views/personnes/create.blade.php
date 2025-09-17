@@ -1,43 +1,102 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Enregistrer une nouvelle personne') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app-shell')
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 md:p-8 text-gray-900" x-data="{ step: 1 }">
+@section('title','Nouvelle personne - IdentifiGen')
+@section('header','Enregistrer une nouvelle personne')
 
-                    <div class="flex justify-between mb-8">
-                        <div class="text-center">
-                            <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-lg" :class="step === 1 ? 'bg-blue-600 text-white' : 'bg-gray-200'">1</div>
-                            <p class="text-xs mt-1">Localisation</p>
+@section('content')
+    <div class="max-w-5xl mx-auto">
+        <!-- Navigation -->
+        <x-page-navigation 
+            :backUrl="route('personnes.index')" 
+            backText="Retour à la liste"
+            :actions="[
+                [
+                    'url' => route('personnes.index'),
+                    'text' => 'Voir toutes les personnes',
+                    'icon' => 'list',
+                    'class' => 'bg-gray-600 text-white hover:bg-gray-700'
+                ]
+            ]"
+        />
+        
+        <div class="bg-white overflow-hidden shadow-sm rounded-xl">
+                <div class="p-6 md:p-8 text-gray-900" x-data="{ 
+                step: 1,
+                validateStep(stepNumber) {
+                    if (stepNumber === 1) {
+                        return document.getElementById('localite_id').value && document.getElementById('eglise_id').value;
+                    }
+                    if (stepNumber === 2) {
+                        return document.getElementById('nom').value && 
+                               document.getElementById('prenom').value && 
+                               document.getElementById('date_naissance').value && 
+                               document.getElementById('lieu_naissance').value && 
+                               document.getElementById('sexe').value && 
+                               document.getElementById('situation_matrimoniale').value;
+                    }
+                    if (stepNumber === 3) {
+                        return true; // La filiation est optionnelle
+                    }
+                    if (stepNumber === 4) {
+                        return document.getElementById('telephone').value;
+                    }
+                    return false;
+                },
+                nextStep() {
+                    if (this.validateStep(this.step)) {
+                        this.step++;
+                    } else {
+                        alert('Veuillez remplir tous les champs obligatoires de cette étape.');
+                    }
+                },
+                prevStep() {
+                    if (this.step > 1) {
+                        this.step--;
+                    }
+                }
+            }">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-semibold text-gray-900 mb-2">Enregistrement d'une nouvelle personne</h2>
+                    <p class="text-sm text-gray-600">Remplissez les informations en suivant les étapes ci-dessous</p>
                         </div>
-                        <div class="text-center">
-                            <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-lg" :class="step === 2 ? 'bg-blue-600 text-white' : 'bg-gray-200'">2</div>
-                            <p class="text-xs mt-1">Identité</p>
+
+                <div class="flex justify-between mb-8 relative">
+                    <div class="absolute top-4 left-0 right-0 h-0.5 bg-gray-200 -z-10"></div>
+                    <div class="text-center relative z-10">
+                        <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-semibold transition-colors" 
+                             :class="step === 1 ? 'bg-blue-600 text-white ring-4 ring-blue-200' : (step > 1 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500')">1</div>
+                        <p class="text-xs mt-2 font-medium" :class="step === 1 ? 'text-blue-600' : (step > 1 ? 'text-green-600' : 'text-gray-500')">Localisation</p>
                         </div>
-                        <div class="text-center">
-                            <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-lg" :class="step === 3 ? 'bg-blue-600 text-white' : 'bg-gray-200'">3</div>
-                            <p class="text-xs mt-1">Filiation</p>
+                    <div class="text-center relative z-10">
+                        <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-semibold transition-colors" 
+                             :class="step === 2 ? 'bg-blue-600 text-white ring-4 ring-blue-200' : (step > 2 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500')">2</div>
+                        <p class="text-xs mt-2 font-medium" :class="step === 2 ? 'text-blue-600' : (step > 2 ? 'text-green-600' : 'text-gray-500')">Identité</p>
                         </div>
-                        <div class="text-center">
-                            <div class="w-8 h-8 mx-auto rounded-full flex items-center justify-center text-lg" :class="step === 4 ? 'bg-blue-600 text-white' : 'bg-gray-200'">4</div>
-                            <p class="text-xs mt-1">Contact</p>
+                    <div class="text-center relative z-10">
+                        <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-semibold transition-colors" 
+                             :class="step === 3 ? 'bg-blue-600 text-white ring-4 ring-blue-200' : (step > 3 ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-500')">3</div>
+                        <p class="text-xs mt-2 font-medium" :class="step === 3 ? 'text-blue-600' : (step > 3 ? 'text-green-600' : 'text-gray-500')">Filiation</p>
+                    </div>
+                    <div class="text-center relative z-10">
+                        <div class="w-10 h-10 mx-auto rounded-full flex items-center justify-center text-sm font-semibold transition-colors" 
+                             :class="step === 4 ? 'bg-blue-600 text-white ring-4 ring-blue-200' : 'bg-gray-200 text-gray-500'">4</div>
+                        <p class="text-xs mt-2 font-medium" :class="step === 4 ? 'text-blue-600' : 'text-gray-500'">Contact</p>
                         </div>
                     </div>
 
-                    <form action="{{ route('personnes.store') }}" method="POST">
+                    <form action="{{ route('personnes.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
-                        <div x-show="step === 1">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Étape 1: Localisation</h3>
-                            <div class="grid grid-cols-1 gap-6">
+                        <div x-show="step === 1" class="space-y-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Étape 1: Localisation</h3>
+                                <p class="text-sm text-blue-700">Sélectionnez la localité et l'église de la personne</p>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label for="localite_id" class="block font-medium text-sm text-gray-700">Localité</label>
-                                    <select name="localite_id" id="localite_id" class="block mt-1 w-full rounded-md shadow-sm border-gray-300">
+                                    <label for="localite_id" class="block text-sm font-medium text-gray-700 mb-2">Localité</label>
+                                    <select name="localite_id" id="localite_id" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                         <option value="">-- Choisir une localité --</option>
                                         @foreach ($localites as $localite)
                                             <option value="{{ $localite->id }}">{{ $localite->nom }}</option>
@@ -45,8 +104,9 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="eglise_id" class="block font-medium text-sm text-gray-700">Église</label>
-                                    <select name="eglise_id" id="eglise_id" class="block mt-1 w-full rounded-md shadow-sm border-gray-300">
+                                    <label for="eglise_id" class="block text-sm font-medium text-gray-700 mb-2">Église</label>
+                                    <select name="eglise_id" id="eglise_id" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                                         <option value="">-- Choisir une église --</option>
                                         @foreach ($eglises as $eglise)
                                             <option value="{{ $eglise->id }}">{{ $eglise->nom }}</option>
@@ -56,61 +116,193 @@
                             </div>
                         </div>
 
-                        <div x-show="step === 2">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Étape 2: Identité</h3>
+                        <div x-show="step === 2" class="space-y-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Étape 2: Identité</h3>
+                                <p class="text-sm text-blue-700">Informations personnelles et documents d'identité</p>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div><label for="nom" class="block font-medium text-sm text-gray-700">Nom</label><input type="text" name="nom" id="nom" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="prenom" class="block font-medium text-sm text-gray-700">Prénom</label><input type="text" name="prenom" id="prenom" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="date_naissance" class="block font-medium text-sm text-gray-700">Date de naissance</label><input type="date" name="date_naissance" id="date_naissance" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="lieu_naissance" class="block font-medium text-sm text-gray-700">Lieu de naissance</label><input type="text" name="lieu_naissance" id="lieu_naissance" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="sexe" class="block font-medium text-sm text-gray-700">Sexe</label><select name="sexe" id="sexe" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"><option value="Masculin">Masculin</option><option value="Féminin">Féminin</option></select></div>
-                                <div><label for="situation_matrimoniale" class="block font-medium text-sm text-gray-700">Situation Matrimoniale</label><select name="situation_matrimoniale" id="situation_matrimoniale" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"><option value="Célibataire">Célibataire</option><option value="Marié(e)">Marié(e)</option><option value="Divorcé(e)">Divorcé(e)</option><option value="Veuf(ve)">Veuf(ve)</option></select></div>
-                                <div><label for="profession" class="block font-medium text-sm text-gray-700">Profession</label><input type="text" name="profession" id="profession" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div class="md:col-span-2"><label for="adresse_exacte" class="block font-medium text-sm text-gray-700">Adresse Exacte</label><textarea name="adresse_exacte" id="adresse_exacte" rows="3" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></textarea></div>
-                                <div><label for="numero_cip" class="block font-medium text-sm text-gray-700">N° CIP / NPI</label><input type="text" name="numero_cip" id="numero_cip" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="lieu_delivrance_cip" class="block font-medium text-sm text-gray-700">Lieu de délivrance</label><input type="text" name="lieu_delivrance_cip" id="lieu_delivrance_cip" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="date_delivrance_cip" class="block font-medium text-sm text-gray-700">Date de délivrance</label><input type="date" name="date_delivrance_cip" id="date_delivrance_cip" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="date_expiration_cip" class="block font-medium text-sm text-gray-700">Date d'expiration</label><input type="date" name="date_expiration_cip" id="date_expiration_cip" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
+                                <div>
+                                    <label for="nom" class="block text-sm font-medium text-gray-700 mb-2">Nom</label>
+                                    <input type="text" name="nom" id="nom" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Nom de famille">
+                                </div>
+                                <div>
+                                    <label for="prenom" class="block text-sm font-medium text-gray-700 mb-2">Prénom</label>
+                                    <input type="text" name="prenom" id="prenom" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Prénom">
+                                </div>
+                                <div>
+                                    <label for="date_naissance" class="block text-sm font-medium text-gray-700 mb-2">Date de naissance</label>
+                                    <input type="date" name="date_naissance" id="date_naissance" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label for="lieu_naissance" class="block text-sm font-medium text-gray-700 mb-2">Lieu de naissance</label>
+                                    <input type="text" name="lieu_naissance" id="lieu_naissance" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Ville de naissance">
+                                </div>
+                                <div>
+                                    <label for="sexe" class="block text-sm font-medium text-gray-700 mb-2">Sexe</label>
+                                    <select name="sexe" id="sexe" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Masculin">Masculin</option>
+                                        <option value="Féminin">Féminin</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="situation_matrimoniale" class="block text-sm font-medium text-gray-700 mb-2">Situation Matrimoniale</label>
+                                    <select name="situation_matrimoniale" id="situation_matrimoniale" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                        <option value="">-- Sélectionner --</option>
+                                        <option value="Célibataire">Célibataire</option>
+                                        <option value="Marié(e)">Marié(e)</option>
+                                        <option value="Divorcé(e)">Divorcé(e)</option>
+                                        <option value="Veuf(ve)">Veuf(ve)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="profession" class="block text-sm font-medium text-gray-700 mb-2">Profession</label>
+                                    <input type="text" name="profession" id="profession" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Profession">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="adresse_exacte" class="block text-sm font-medium text-gray-700 mb-2">Adresse Exacte</label>
+                                    <textarea name="adresse_exacte" id="adresse_exacte" rows="3" 
+                                              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                              placeholder="Adresse complète"></textarea>
+                                </div>
+                                <div>
+                                    <label for="numero_cip" class="block text-sm font-medium text-gray-700 mb-2">N° CIP / NPI</label>
+                                    <input type="text" name="numero_cip" id="numero_cip" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Numéro d'identification">
+                                </div>
+                                <div>
+                                    <label for="lieu_delivrance_cip" class="block text-sm font-medium text-gray-700 mb-2">Lieu de délivrance</label>
+                                    <input type="text" name="lieu_delivrance_cip" id="lieu_delivrance_cip" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Lieu de délivrance du document">
+                                </div>
+                                <div>
+                                    <label for="date_delivrance_cip" class="block text-sm font-medium text-gray-700 mb-2">Date de délivrance</label>
+                                    <input type="date" name="date_delivrance_cip" id="date_delivrance_cip" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                </div>
+                                <div>
+                                    <label for="date_expiration_cip" class="block text-sm font-medium text-gray-700 mb-2">Date d'expiration</label>
+                                    <input type="date" name="date_expiration_cip" id="date_expiration_cip" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                                </div>
                             </div>
                         </div>
 
-                        <div x-show="step === 3">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Étape 3: Filiation</h3>
+                        <div x-show="step === 3" class="space-y-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Étape 3: Filiation</h3>
+                                <p class="text-sm text-blue-700">Informations sur les parents de la personne</p>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div><label for="prenom_pere" class="block font-medium text-sm text-gray-700">Prénom du père</label><input type="text" name="prenom_pere" id="prenom_pere" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="nom_pere" class="block font-medium text-sm text-gray-700">Nom du père</label><input type="text" name="nom_pere" id="nom_pere" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="prenom_mere" class="block font-medium text-sm text-gray-700">Prénom de la mère</label><input type="text" name="prenom_mere" id="prenom_mere" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="nom_mere" class="block font-medium text-sm text-gray-700">Nom de la mère</label><input type="text" name="nom_mere" id="nom_mere" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
+                                <div>
+                                    <label for="prenom_pere" class="block text-sm font-medium text-gray-700 mb-2">Prénom du père</label>
+                                    <input type="text" name="prenom_pere" id="prenom_pere" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Prénom du père">
+                                </div>
+                                <div>
+                                    <label for="nom_pere" class="block text-sm font-medium text-gray-700 mb-2">Nom du père</label>
+                                    <input type="text" name="nom_pere" id="nom_pere" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Nom du père">
+                                </div>
+                                <div>
+                                    <label for="prenom_mere" class="block text-sm font-medium text-gray-700 mb-2">Prénom de la mère</label>
+                                    <input type="text" name="prenom_mere" id="prenom_mere" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Prénom de la mère">
+                                </div>
+                                <div>
+                                    <label for="nom_mere" class="block text-sm font-medium text-gray-700 mb-2">Nom de la mère</label>
+                                    <input type="text" name="nom_mere" id="nom_mere" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Nom de la mère">
+                                </div>
                             </div>
                         </div>
 
-                        <div x-show="step === 4">
-                            <h3 class="text-lg font-medium text-gray-900 mb-4">Étape 4: Contact</h3>
+                        <div x-show="step === 4" class="space-y-6">
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h3 class="text-lg font-semibold text-blue-900 mb-2">Étape 4: Contact</h3>
+                                <p class="text-sm text-blue-700">Informations de contact et photo d'identité</p>
+                            </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div><label for="nationalite" class="block font-medium text-sm text-gray-700">Nationalité</label><input type="text" name="nationalite" id="nationalite" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div><label for="telephone" class="block font-medium text-sm text-gray-700">N° de Téléphone (obligatoire)</label><input type="tel" name="telephone" id="telephone" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
-                                <div class="md:col-span-2"><label for="email" class="block font-medium text-sm text-gray-700">Email (facultatif)</label><input type="email" name="email" id="email" class="block mt-1 w-full rounded-md shadow-sm border-gray-300"></div>
+                                <div>
+                                    <label for="nationalite" class="block text-sm font-medium text-gray-700 mb-2">Nationalité</label>
+                                    <input type="text" name="nationalite" id="nationalite" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Nationalité">
+                                </div>
+                                <div>
+                                    <label for="telephone" class="block text-sm font-medium text-gray-700 mb-2">
+                                        N° de Téléphone <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="tel" name="telephone" id="telephone" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="Numéro de téléphone" required>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email (facultatif)</label>
+                                    <input type="email" name="email" id="email" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" 
+                                           placeholder="adresse@email.com">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="flex items-center justify-between mt-8">
-                            <button type="button" x-show="step > 1" @click.prevent="step--" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                        <div class="flex items-center justify-between mt-8 pt-6 border-t border-gray-200">
+                            <button type="button" x-show="step > 1" @click.prevent="prevStep()" 
+                                    class="inline-flex items-center px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                </svg>
                                 Précédent
                             </button>
 
-                            <div x-show="step === 1"></div>
+                            <div x-show="step === 1" class="flex-1"></div>
 
-                            <button type="button" x-show="step < 4" @click.prevent="step++" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                            <button type="button" x-show="step < 4" @click.prevent="nextStep()" 
+                                    class="inline-flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors font-medium">
     Étape suivante
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
 </button>
 
-                            <button type="submit" x-show="step === 4" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                            <div x-show="step === 4" class="flex space-x-3">
+                                <button type="button" @click.prevent="prevStep()" 
+                                        class="inline-flex items-center px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                    Précédent
+                                </button>
+                                <button type="submit" 
+                                        class="inline-flex items-center px-6 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors font-medium">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                    </svg>
                                 Valider et passer aux documents
                             </button>
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+@endsection

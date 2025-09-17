@@ -33,6 +33,7 @@ class Personne extends Model
         'date_delivrance_cip',
         'lieu_delivrance_cip',
         'date_expiration_cip',
+        'photo_path',
         'nom_pere',
         'prenom_pere',
         'nom_mere',
@@ -54,5 +55,13 @@ public function adminCreateur()
 {
     // On spécifie que la clé étrangère est 'admin_createur_id'
     return $this->belongsTo(User::class, 'admin_createur_id');
+}
+
+/**
+ * Récupère les documents associés à cette personne.
+ */
+public function documents()
+{
+    return $this->hasMany(Document::class);
 }
 }
