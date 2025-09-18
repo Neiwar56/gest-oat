@@ -19,8 +19,17 @@ class PersonnePolicy
 
     public function view(User $user, Personne $personne): bool
     {
-        // Tous les utilisateurs (admin et super_admin) peuvent voir toutes les personnes
-        return in_array($user->role, ['admin', 'super_admin']);
+        // Le super admin peut voir toutes les personnes
+        if ($user->role === 'super_admin') {
+            return true;
+        }
+        
+        // Les admins normaux ne peuvent voir que leurs propres personnes
+        if ($user->role === 'admin') {
+            return $personne->admin_createur_id === $user->id;
+        }
+        
+        return false;
     }
 
     public function export(User $user): bool
@@ -30,8 +39,17 @@ class PersonnePolicy
 
     public function update(User $user, Personne $personne): bool
     {
-        // Tous les utilisateurs (admin et super_admin) peuvent modifier les personnes
-        return in_array($user->role, ['admin', 'super_admin']);
+        // Le super admin peut modifier toutes les personnes
+        if ($user->role === 'super_admin') {
+            return true;
+        }
+        
+        // Les admins normaux ne peuvent modifier que leurs propres personnes
+        if ($user->role === 'admin') {
+            return $personne->admin_createur_id === $user->id;
+        }
+        
+        return false;
     }
 
     public function delete(User $user, Personne $personne): bool

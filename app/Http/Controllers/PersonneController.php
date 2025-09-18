@@ -114,8 +114,15 @@ class PersonneController extends Controller
         });
     }
 
-    // Tous les utilisateurs (admin et super_admin) voient toutes les personnes
-    $personnes = $query->latest()->paginate(15)->withQueryString();
+    // Filtrage selon le rôle de l'utilisateur
+    if ($user->role === 'super_admin') {
+        // Le super admin voit toutes les personnes
+        $personnes = $query->latest()->paginate(15)->withQueryString();
+    } else {
+        // Les admins normaux voient seulement leurs propres personnes
+        $query->where('admin_createur_id', $user->id);
+        $personnes = $query->latest()->paginate(15)->withQueryString();
+    }
     
     if ($user->role === 'super_admin') {
         $admins = User::whereIn('role', ['admin','super_admin'])->orderBy('name')->get();
