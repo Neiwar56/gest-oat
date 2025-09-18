@@ -68,11 +68,6 @@
                         <i data-feather="log-in" class="w-5 h-5 mr-2"></i> Se connecter
                     </button>
                 </form>
-                <div class="mt-8 text-center">
-                    @if (Route::has('register'))
-                        <p class="text-gray-600">Vous n'avez pas de compte? <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500 font-medium">S'inscrire</a></p>
-                    @endif
-                </div>
             </div>
         </div>
     </div>
