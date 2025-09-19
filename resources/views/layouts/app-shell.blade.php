@@ -114,12 +114,13 @@
         <div class="px-6 py-4 sidebar-border">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3 sidebar-content">
-                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <i data-feather="users" class="w-6 h-6 text-blue-600"></i>
-                    </div>
+        <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <img src="{{ asset('images/images.jpg') }}" 
+                 alt="Communauté Internationale de la Rédemption" 
+                 class="w-8 h-8 object-contain">
+        </div>
                     <div class="sidebar-text">
                         <span class="text-xl font-bold text-gray-800">IdentifiGen</span>
-                        <p class="text-xs text-gray-500">Gestion des identités</p>
                     </div>
                 </div>
                 <button id="sidebarToggle" class="text-gray-500 hover:text-gray-700 p-1 rounded hover:bg-gray-100 flex-shrink-0">

@@ -94,7 +94,7 @@ class PersonneController extends Controller
     $admins = collect();
     $search = $request->get('search');
 
-    // Construction de la requête de base
+    // Construction de la requête de base (exclut les éléments supprimés)
     $query = Personne::with('eglise', 'adminCreateur');
 
     // Ajout de la recherche si un terme est fourni

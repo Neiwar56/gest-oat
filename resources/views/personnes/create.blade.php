@@ -23,30 +23,69 @@
                 <div class="p-6 md:p-8 text-gray-900" x-data="{ 
                 step: 1,
                 validateStep(stepNumber) {
+                    let isValid = true;
+                    let errorFields = [];
+                    
                     if (stepNumber === 1) {
-                        return document.getElementById('localite_id').value && document.getElementById('eglise_id').value;
+                        if (!document.getElementById('localite_id').value) {
+                            errorFields.push('localite_id');
+                            isValid = false;
+                        }
+                        if (!document.getElementById('eglise_id').value) {
+                            errorFields.push('eglise_id');
+                            isValid = false;
+                        }
                     }
                     if (stepNumber === 2) {
-                        return document.getElementById('nom').value && 
-                               document.getElementById('prenom').value && 
-                               document.getElementById('date_naissance').value && 
-                               document.getElementById('lieu_naissance').value && 
-                               document.getElementById('sexe').value && 
-                               document.getElementById('situation_matrimoniale').value;
+                        const requiredFields = ['nom', 'prenom', 'date_naissance', 'lieu_naissance', 'sexe', 'situation_matrimoniale'];
+                        requiredFields.forEach(fieldId => {
+                            if (!document.getElementById(fieldId).value) {
+                                errorFields.push(fieldId);
+                                isValid = false;
+                            }
+                        });
                     }
                     if (stepNumber === 3) {
                         return true; // La filiation est optionnelle
                     }
                     if (stepNumber === 4) {
-                        return document.getElementById('telephone').value;
+                        if (!document.getElementById('telephone').value) {
+                            errorFields.push('telephone');
+                            isValid = false;
+                        }
                     }
-                    return false;
+                    
+                    // Appliquer le style d'erreur aux champs
+                    this.highlightErrorFields(errorFields);
+                    
+                    return isValid;
+                },
+                highlightErrorFields(errorFields) {
+                    // Réinitialiser tous les champs
+                    const allFields = document.querySelectorAll('input, select, textarea');
+                    allFields.forEach(field => {
+                        field.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+                        field.classList.add('border-gray-300');
+                    });
+                    
+                    // Appliquer le style d'erreur aux champs en erreur
+                    errorFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        if (field) {
+                            field.classList.remove('border-gray-300');
+                            field.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+                        }
+                    });
                 },
                 nextStep() {
                     if (this.validateStep(this.step)) {
                         this.step++;
                     } else {
-                        alert('Veuillez remplir tous les champs obligatoires de cette étape.');
+                        // Afficher un message d'erreur plus spécifique
+                        const errorMessage = this.step === 1 ? 'Veuillez sélectionner une localité et une église.' :
+                                           this.step === 2 ? 'Veuillez remplir tous les champs obligatoires de l\'identité.' :
+                                           this.step === 4 ? 'Veuillez saisir un numéro de téléphone.' : 'Veuillez remplir tous les champs obligatoires.';
+                        alert(errorMessage);
                     }
                 },
                 prevStep() {

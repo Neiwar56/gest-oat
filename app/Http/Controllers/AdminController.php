@@ -14,7 +14,7 @@ class AdminController extends Controller
 
         $search = $request->get('search');
         
-        // Construction de la requête de base
+        // Construction de la requête de base (exclut les éléments supprimés)
         $query = User::whereIn('role', ['admin','super_admin']);
 
         // Ajout de la recherche si un terme est fourni

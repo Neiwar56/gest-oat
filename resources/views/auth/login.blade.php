@@ -19,11 +19,16 @@
         <div class="flex flex-col md:flex-row shadow-2xl rounded-xl overflow-hidden">
             <div class="md:w-1/2 auth-bg text-white p-12 hidden md:flex flex-col justify-center">
                 <div class="text-center">
-                    <i data-feather="users" class="w-16 h-16 mx-auto mb-6"></i>
-                    <h1 class="text-3xl font-bold mb-4">Bienvenue sur IdentifiGen</h1>
+                    <!-- Logo de la Communauté Internationale de la Rédemption -->
+        <div class="mb-8">
+            <img src="{{ asset('images/images.jpg') }}" 
+                 alt="Communauté Internationale de la Rédemption" 
+                 class="w-40 h-40 mx-auto mb-4 object-contain rounded-2xl shadow-lg">
+        </div>
+                    <h1 class="text-3xl font-bold mb-4">IdentifiGen</h1>
+                    <p class="text-blue-100 text-lg font-medium mb-2">Communauté Internationale de la Rédemption</p>
                     <p class="text-blue-100">Plateforme sécurisée d'identification et de gestion des données personnelles.</p>
                 </div>
-                <img src="http://static.photos/technology/640x360/3" alt="Authentication" class="mt-12 rounded-lg">
             </div>
             <div class="md:w-1/2 bg-white p-12">
                 @if (session('status'))
@@ -60,19 +65,11 @@
                             <input type="checkbox" name="remember" class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                             <span class="ml-2 block text-sm text-gray-700">Se souvenir de moi</span>
                         </label>
-                        @if (Route::has('password.request'))
-                            <a href="{{ route('password.request') }}" class="text-sm text-blue-600 hover:text-blue-500">Mot de passe oublié?</a>
-                        @endif
                     </div>
                     <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-bold hover:bg-blue-700 transition flex items-center justify-center">
                         <i data-feather="log-in" class="w-5 h-5 mr-2"></i> Se connecter
                     </button>
                 </form>
-                <div class="mt-8 text-center">
-                    @if (Route::has('register'))
-                        <p class="text-gray-600">Vous n'avez pas de compte? <a href="{{ route('register') }}" class="text-blue-600 hover:text-blue-500 font-medium">S'inscrire</a></p>
-                    @endif
-                </div>
             </div>
         </div>
     </div>
