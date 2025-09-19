@@ -1,7 +1,6 @@
 @extends('layouts.app-shell')
 
 @section('title','Personnes - IdentifiGen')
-@section('header','Liste des Personnes Enregistrées')
 
 @section('content')
 <div class="bg-white rounded-xl shadow overflow-hidden" data-aos="fade-up">
@@ -12,26 +11,26 @@
                 <i data-feather="user-plus" class="w-4 h-4 mr-2"></i> Ajouter
             </a>
         </div>
-        
+
         <!-- Barre de recherche -->
         <form method="GET" action="{{ route('personnes.index') }}" class="flex items-center space-x-4">
             <div class="flex-1 relative">
                 <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                     <i data-feather="search" class="h-4 w-4 text-gray-400"></i>
                 </div>
-                <input type="text" 
-                       name="search" 
+                <input type="text"
+                       name="search"
                        value="{{ $search ?? '' }}"
                        placeholder="Rechercher par nom, prénom, email, téléphone, CIP, église ou créateur..."
                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm">
             </div>
-            <button type="submit" 
+            <button type="submit"
                     class="inline-flex items-center px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
                 <i data-feather="search" class="w-4 h-4 mr-2"></i>
                 Rechercher
             </button>
             @if($search ?? false)
-                <a href="{{ route('personnes.index') }}" 
+                <a href="{{ route('personnes.index') }}"
                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                     <i data-feather="x" class="w-4 h-4 mr-2"></i>
                     Effacer
@@ -47,7 +46,7 @@
             </p>
         </div>
     @endif
-    
+
     <div class="overflow-x-auto">
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-50">
@@ -93,22 +92,22 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $personne->created_at->format('d/m/Y') }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div class="flex items-center space-x-2">
-                                <a href="{{ route('personnes.show', $personne) }}" 
+                                <a href="{{ route('personnes.show', $personne) }}"
                                    class="inline-flex items-center px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors">
                                     <i data-feather="eye" class="w-3 h-3 mr-1"></i>
                                     Voir
                                 </a>
-                                <a href="{{ route('personnes.edit', $personne) }}" 
+                                <a href="{{ route('personnes.edit', $personne) }}"
                                    class="inline-flex items-center px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded hover:bg-yellow-200 transition-colors">
                                     <i data-feather="edit" class="w-3 h-3 mr-1"></i>
                                     Modifier
                                 </a>
                                 @can('is-super-admin')
-                                    <form action="{{ route('personnes.destroy', $personne) }}" method="POST" class="inline" 
+                                    <form action="{{ route('personnes.destroy', $personne) }}" method="POST" class="inline"
                                           onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette personne ? Cette action est irréversible.')">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" 
+                                        <button type="submit"
                                                 class="inline-flex items-center px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">
                                             <i data-feather="trash-2" class="w-3 h-3 mr-1"></i>
                                             Supprimer
